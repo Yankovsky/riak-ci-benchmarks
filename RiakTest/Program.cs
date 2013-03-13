@@ -14,7 +14,9 @@ namespace RiakTest
             //new WriteToMultipleBucketsTest(1000, 143, 47, 16).Run(true, false);
             //new SecondaryIndexesTest(100000, 10000, 2500, 6).Run(setUp:false,tearDown:false);
             
-            new GoodCommentsTest(1000, 200, 20, 2, "UserId", 0, 40).Run(false, false);
+            // Change params here to customize your test
+            // at first run with params (true,false) to setup sample data, then change back to false, false
+            new GoodsCommentsAllTogetherTest(1000, 200, 20, 2, "UserId", 15, 7, 10).Run(false, false);
             
             Console.WriteLine("Press enter to continue...");
             Console.Read();

@@ -2,6 +2,7 @@
 
 namespace RiakTest
 {
+    // Sample data similar to one we use in production for goods comments
     public class GoodComment
     {
         public int Id { get; set; }
