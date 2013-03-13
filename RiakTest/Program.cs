@@ -16,7 +16,7 @@ namespace RiakTest
             
             // Change params here to customize your test
             // at first run with params (true,false) to setup sample data, then change back to false, false
-            new GoodsCommentsAllTogetherTest(1000, 200, 20, 2, "UserId", 15, 7, 10).Run(false, false);
+            new GoodsCommentsAllTogetherTest(100000, 2000, 200, 20, "DepartmentId", 15, 50, 100).Run(false, false);
             
             Console.WriteLine("Press enter to continue...");
             Console.Read();

@@ -106,9 +106,18 @@ function(val, arg) {
     var start = parsedArg.start;
     var end = parsedArg.end;
     return Riak.reduceSlice(Riak.reduceSort(val, function(a,b) {
-        return +a.CreatedAt.getTime() - b.CreatedAt.getTime()
+        var aStr = a.CreatedAt;
+        var bStr = b.CreatedAt;
+        if (aStr > bStr) {
+            return 1;
+        } else if (aStr == bStr) {
+            return 0;
+        }
+        return -1;
     }), [start, end]);
 }";
+
+            var a = RiakClient.IndexGet(Bucket, _searchByIndexName, rangeMin, rangeMax);
 
             RiakResult<RiakMapReduceResult> result = null;
             Bench("Get by secondary index", bucket =>
@@ -134,6 +143,7 @@ function(val, arg) {
             {
                 var phaseNumber = phase.Phase;
                 var collection = phase.GetObjects();
+                var b = collection.Select(x => x[0].CreatedAt).ToList();
                 Console.WriteLine(phaseNumber);
                 Console.WriteLine(string.Join(", ", collection));
             }

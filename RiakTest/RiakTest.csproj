@@ -56,7 +56,7 @@
     <Compile Include="GoodComment.cs" />
     <Compile Include="GetArrayObtainedByOneKeyTest.cs" />
     <Compile Include="GetGoodsByUserIdUsingRiakSearch.cs" />
-    <Compile Include="GoodCommentsTest.cs" />
+    <Compile Include="GoodsCommentsAllTogetherTest.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="GetTopWithOffsetFromArrayObtainedByOneKeyViaMapReduceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
