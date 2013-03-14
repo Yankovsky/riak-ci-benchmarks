@@ -8,12 +8,12 @@ using CorrugatedIron.Models.Search;
 
 namespace RiakTest
 {
-    public class SimpleRiakSearchTestBase : RiakTestBase
+    public class SimpleRiakSearchTest : RiakTestBase
     {
         private readonly int _commentsCount;
         private readonly int _usersCount;
 
-        public SimpleRiakSearchTestBase(int commentsCount, int usersCount) : base("search_bucket")
+        public SimpleRiakSearchTest(int commentsCount, int usersCount) : base("search_bucket")
         {
             _commentsCount = commentsCount;
             _usersCount = usersCount;

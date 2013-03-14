@@ -4,13 +4,13 @@ using CorrugatedIron.Models;
 
 namespace RiakTest
 {
-    public class GetArrayObtainedByOneKeyTestBase : RiakTestBase
+    public class GetArrayObtainedByOneKeyTest : RiakTestBase
     {
         public const string Key = "my-key";
 
         private readonly int _n;
 
-        public GetArrayObtainedByOneKeyTestBase(int n, bool setUp = true, bool tearDown = true)
+        public GetArrayObtainedByOneKeyTest(int n, bool setUp = true, bool tearDown = true)
             : base("get-array-obtained-by-one-key-test", setUp, tearDown)
         {
             _n = n;

@@ -7,14 +7,14 @@ using CorrugatedIron.Models;
 
 namespace RiakTest
 {
-    public class SecondaryIndexesTestBase : RiakTestBase
+    public class SecondaryIndexesTest : RiakTestBase
     {
         private readonly int _commentsCount;
         private readonly int _departmentsCount;
         private readonly int _goodsCount;
         private readonly int _usersCount;
 
-        public SecondaryIndexesTestBase(int commentsCount, int goodsCount, int usersCount, int departmentsCount) : base("secondary-indexes-test-bucket")
+        public SecondaryIndexesTest(int commentsCount, int goodsCount, int usersCount, int departmentsCount) : base("secondary-indexes-test-bucket")
         {
             _commentsCount = commentsCount;
             _goodsCount = goodsCount;

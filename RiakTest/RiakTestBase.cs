@@ -28,11 +28,7 @@ namespace RiakTest
 
         protected void TearDown()
         {
-            var result = RiakClient.IndexGet(Bucket, "$bucket", Bucket);
-            foreach (var value in result.Value)
-            {
-                RiakClient.Delete(Bucket, value);
-            }
+            foreach (var key in RiakClient.ListKeysFromIndex(Bucket).Value) { RiakClient.Delete(Bucket, key); }
         }
 
         public void Run()

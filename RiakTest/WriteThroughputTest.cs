@@ -7,12 +7,12 @@ using CorrugatedIron.Models;
 
 namespace RiakTest
 {
-    public class WriteThroughputTestBase : RiakTestBase
+    public class WriteThroughputTest : RiakTestBase
     {
         private readonly int _n;
         private IEnumerable<RiakObject> _riakObjects;
 
-        public WriteThroughputTestBase(int n) : base("write-test-bucket")
+        public WriteThroughputTest(int n) : base("write-test-bucket")
         {
             _n = n;
         }

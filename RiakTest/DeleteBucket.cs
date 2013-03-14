@@ -6,6 +6,11 @@ using CorrugatedIron.Models;
 
 namespace RiakTest
 {
+    /// <summary>
+    /// on my machine this method is fastest
+    /// RiakClient.Delete on keys obtained by RiakClient.ListKeysFromIndex(Bucket)
+    /// foreach (var key in RiakClient.ListKeysFromIndex(Bucket).Value) { RiakClient.Delete(Bucket, key); }
+    /// </summary>
     public class DeleteBucket : RiakTestBase
     {
         private readonly int _count;

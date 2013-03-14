@@ -7,11 +7,11 @@ namespace RiakTest
     /// http://blog.8thlight.com/myles-megyesi/2013/01/18/riak-mapreduce.html
     /// http://ecma262-5.com/ELS5_HTML.htm#Section_8.5
     /// </summary>
-    public class BigIntegersJavascriptTestBase : RiakTestBase
+    public class BigIntegersJavascriptTest : RiakTestBase
     {
         private long _maxLong = long.MaxValue;
 
-        public BigIntegersJavascriptTestBase(string bucket) : base(bucket)
+        public BigIntegersJavascriptTest(string bucket) : base(bucket)
         {
         }
 

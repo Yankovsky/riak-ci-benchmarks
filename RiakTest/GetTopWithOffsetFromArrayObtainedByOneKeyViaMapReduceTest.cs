@@ -7,7 +7,7 @@ using CorrugatedIron.Models.MapReduce.Inputs;
 
 namespace RiakTest
 {
-    public class GetTopWithOffsetFromArrayObtainedByOneKeyViaMapReduceTestBase : RiakTestBase
+    public class GetTopWithOffsetFromArrayObtainedByOneKeyViaMapReduceTest : RiakTestBase
     {
         public const string Key = "my-key232";
 
@@ -15,7 +15,7 @@ namespace RiakTest
         private readonly int _offset;
         private readonly int _limit;
 
-        public GetTopWithOffsetFromArrayObtainedByOneKeyViaMapReduceTestBase(int n, int offset, int limit) : base("get-top-with-offset-from-array-obtained-by-one-key-via-map-reduce-test")
+        public GetTopWithOffsetFromArrayObtainedByOneKeyViaMapReduceTest(int n, int offset, int limit) : base("get-top-with-offset-from-array-obtained-by-one-key-via-map-reduce-test")
         {
             _n = n;
             _offset = offset;
