@@ -96,12 +96,9 @@ namespace RiakTest
             // These phases should be executed on single machine with all data obtained.
             // There is some additional param reduce_phase_only_1, but it doesn't work with CI, or i don't know how to use it with CI.
             // So I merge two reduce phases into one. Now I have correct results.
-            const string orderByCreateAtOffsetLimitSuperPuperFunction = @"
+            const string orderByCreateAtFunction = @"
 function(val, arg) { 
-    var parsedArg = JSON.parse(arg);
-    var start = parsedArg.start;
-    var end = parsedArg.end;
-    return Riak.reduceSlice(Riak.reduceSort(val, function(a,b) {
+    return Riak.reduceSort(val, function(a,b) {
         var aStr = a.CreatedAt;
         var bStr = b.CreatedAt;
         if (aStr > bStr) {
@@ -110,8 +107,16 @@ function(val, arg) {
             return 0;
         }
         return -1;
-    }), [start, end]);
+    });
 }";
+            const string sliceFunction = @"
+function(val, arg) { 
+    var parsedArg = JSON.parse(arg);
+    var start = parsedArg.start;
+    var end = parsedArg.end;
+    return Riak.reduceSlice(val, [start, end]);
+}
+";
 
             RiakResult<RiakMapReduceResult> result = null;
             Bench(string.Format("Get goods comments by {0} {1}, sort by CreatedAt date and then take elements from {2} to {3}", _searchByIndexName, _searchByIndexId, _start, _end), () =>
@@ -121,7 +126,8 @@ function(val, arg) {
                     var query = new RiakMapReduceQuery()
                         .Inputs(siDateRangeInput)
                         .MapJs(x => x.Name("Riak.mapValuesJson"))
-                        .ReduceJs(x => x.Argument(offsetLimitArg).Source(orderByCreateAtOffsetLimitSuperPuperFunction).Keep(true));
+                        .ReduceJs(x => x.Source(orderByCreateAtFunction).Keep(true))
+                        .ReduceJs(x => x.Argument(offsetLimitArg).Source(sliceFunction).Keep(true));
                     result = RiakClient.MapReduce(query);
                 });
             if (!result.IsSuccess)
@@ -136,7 +142,7 @@ function(val, arg) {
             foreach (var phase in mapReduceResult.Value.PhaseResults)
             {
                 var phaseNumber = phase.Phase;
-                var collection = phase.GetObjects();
+                var collection = phase.GetObjects().ToList();
                 Console.WriteLine(phaseNumber);
                 Console.WriteLine(string.Join(", ", collection));
             }
