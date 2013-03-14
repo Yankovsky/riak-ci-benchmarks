@@ -20,8 +20,8 @@ namespace RiakTest
         private readonly int _start;
         private readonly int _usersCount;
 
-        public GoodsCommentsAllTogetherTestBase(int commentsCount, int goodsCount, int usersCount, int departmentsCount, string searchByIndexName,
-                                                int searchByIndexId, int start, int end, bool setUp, bool tearDown) : base("secondary-indexes-test-bucket", setUp, tearDown)
+        public GoodsCommentsAllTogetherTestBase(int commentsCount, int goodsCount, int usersCount, int departmentsCount, string searchByIndexName, int searchByIndexId, int start, int end,
+                                                bool setUp = true, bool tearDown = true) : base("secondary-indexes-test-bucket", setUp, tearDown)
         {
             _commentsCount = commentsCount;
             _goodsCount = goodsCount;
@@ -114,7 +114,7 @@ function(val, arg) {
 }";
 
             RiakResult<RiakMapReduceResult> result = null;
-            Bench("Get by secondary index", () =>
+            Bench(string.Format("Get goods comments by {0} {1}, sort by CreatedAt date and then take elements from {2} to {3}", _searchByIndexName, _searchByIndexId, _start, _end), () =>
                 {
                     var siDateRangeInput = new RiakBinIndexRangeInput(Bucket, _searchByIndexName, rangeMin, rangeMax);
 

@@ -16,9 +16,9 @@ namespace RiakTest
             
             // Change params here to customize your test
             // at first run with params (true,false) to setup sample data, then change back to false, false
-            //new GoodsCommentsAllTogetherTestBase(100000, 2000, 200, 20, "DepartmentId", 15, 50, 100).Run(false, false);
+            new GoodsCommentsAllTogetherTestBase(100000, 2000, 200, 20, "DepartmentId", 15, 97, 99, false, false).Run();
             
-            new DeleteBucket("delete-bucket", 1000).Run();
+            //new DeleteBucket("delete-bucket", 1000).Run();
 
             Console.WriteLine("Press enter to continue...");
             Console.Read();
