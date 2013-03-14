@@ -53,6 +53,22 @@ namespace RiakTest
                         },
                     new DeleteBucketMethod
                         {
+                            Name = "RiakClient.Delete on keys obtained by $bucket index using RiakClient.Batch",
+                            Method = () => RiakClient.Batch(x =>
+                                {
+                                    foreach (var key in x.IndexGet(Bucket, "$bucket", Bucket).Value)
+                                    {
+                                        x.Delete(Bucket, key);
+                                    }
+                                })
+                        },
+                    new DeleteBucketMethod
+                        {
+                            Name = "RiakClient.Delete on keys obtained by $bucket index using RiakClient.Delete(IEnumerable<RiakObjectId>)",
+                            Method = () => RiakClient.Delete(RiakClient.IndexGet(Bucket, "$bucket", Bucket).Value.Select(key => new RiakObjectId(Bucket, key)))
+                        },
+                    new DeleteBucketMethod
+                        {
                             Name = "RiakClient.Delete on keys obtained by $key index on range minChar to maxChar",
                             Method = () =>
                                 {
@@ -103,7 +119,7 @@ namespace RiakTest
                             Name = "RiakClient.Delete on keys obtained by RiakClient.ListKeysFromIndex(Bucket) using RiakClient.Batch",
                             Method = () => RiakClient.Batch(x =>
                                 {
-                                    foreach (var key in x.ListKeys(Bucket).Value)
+                                    foreach (var key in x.ListKeysFromIndex(Bucket).Value)
                                     {
                                         x.Delete(Bucket, key);
                                     }
@@ -112,7 +128,7 @@ namespace RiakTest
                     new DeleteBucketMethod
                         {
                             Name = "RiakClient.Delete on keys obtained by RiakClient.ListKeysFromIndex(Bucket) using RiakClient.Delete(IEnumerable<RiakObjectId>)",
-                            Method = () => RiakClient.Delete(RiakClient.ListKeys(Bucket).Value.Select(key => new RiakObjectId(Bucket, key)))
+                            Method = () => RiakClient.Delete(RiakClient.ListKeysFromIndex(Bucket).Value.Select(key => new RiakObjectId(Bucket, key)))
                         }
                 };
 
