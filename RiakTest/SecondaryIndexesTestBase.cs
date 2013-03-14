@@ -7,16 +7,14 @@ using CorrugatedIron.Models;
 
 namespace RiakTest
 {
-    public class SecondaryIndexesTest : RiakTest
+    public class SecondaryIndexesTestBase : RiakTestBase
     {
-        public const string Bucket = "secondary-indexes-test-bucket";
-
         private readonly int _commentsCount;
         private readonly int _departmentsCount;
         private readonly int _goodsCount;
         private readonly int _usersCount;
 
-        public SecondaryIndexesTest(int commentsCount, int goodsCount, int usersCount, int departmentsCount)
+        public SecondaryIndexesTestBase(int commentsCount, int goodsCount, int usersCount, int departmentsCount) : base("secondary-indexes-test-bucket")
         {
             _commentsCount = commentsCount;
             _goodsCount = goodsCount;
@@ -64,23 +62,10 @@ namespace RiakTest
         protected override void DoWork()
         {
             RiakResult<IList<string>> result = null;
-            Bench("Get by secondary index", bucket => { result = RiakClient.IndexGet(bucket, "user-id", 2); }, Bucket);
+            Bench("Get by secondary index", () => { result = RiakClient.IndexGet(Bucket, "user-id", 2); });
             if (!result.IsSuccess)
             {
                 throw new SystemException();
-            }
-        }
-
-        protected override void TearDown()
-        {
-            var result = RiakClient.IndexGet(Bucket, "$bucket", "");
-            if (!result.IsSuccess)
-            {
-                throw new SystemException();
-            }
-            foreach (var value in result.Value)
-            {
-                RiakClient.Delete(Bucket, value);
             }
         }
     }

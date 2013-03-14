@@ -9,10 +9,8 @@ using CorrugatedIron.Models.MapReduce.Inputs;
 
 namespace RiakTest
 {
-    public class GoodsCommentsAllTogetherTest : RiakTest
+    public class GoodsCommentsAllTogetherTestBase : RiakTestBase
     {
-        public const string Bucket = "secondary-indexes-test-bucket";
-
         private readonly int _commentsCount;
         private readonly int _departmentsCount;
         private readonly int _end;
@@ -22,9 +20,8 @@ namespace RiakTest
         private readonly int _start;
         private readonly int _usersCount;
 
-        public GoodsCommentsAllTogetherTest(int commentsCount, int goodsCount, int usersCount, int departmentsCount, string searchByIndexName,
-                                            int searchByIndexId,
-                                            int start, int end)
+        public GoodsCommentsAllTogetherTestBase(int commentsCount, int goodsCount, int usersCount, int departmentsCount, string searchByIndexName,
+                                                int searchByIndexId, int start, int end, bool setUp, bool tearDown) : base("secondary-indexes-test-bucket", setUp, tearDown)
         {
             _commentsCount = commentsCount;
             _goodsCount = goodsCount;
@@ -99,7 +96,6 @@ namespace RiakTest
             // These phases should be executed on single machine with all data obtained.
             // There is some additional param reduce_phase_only_1, but it doesn't work with CI, or i don't know how to use it with CI.
             // So I merge two reduce phases into one. Now I have correct results.
-
             const string orderByCreateAtOffsetLimitSuperPuperFunction = @"
 function(val, arg) { 
     var parsedArg = JSON.parse(arg);
@@ -117,10 +113,8 @@ function(val, arg) {
     }), [start, end]);
 }";
 
-            var a = RiakClient.IndexGet(Bucket, _searchByIndexName, rangeMin, rangeMax);
-
             RiakResult<RiakMapReduceResult> result = null;
-            Bench("Get by secondary index", bucket =>
+            Bench("Get by secondary index", () =>
                 {
                     var siDateRangeInput = new RiakBinIndexRangeInput(Bucket, _searchByIndexName, rangeMin, rangeMax);
 
@@ -129,7 +123,7 @@ function(val, arg) {
                         .MapJs(x => x.Name("Riak.mapValuesJson"))
                         .ReduceJs(x => x.Argument(offsetLimitArg).Source(orderByCreateAtOffsetLimitSuperPuperFunction).Keep(true));
                     result = RiakClient.MapReduce(query);
-                }, Bucket);
+                });
             if (!result.IsSuccess)
             {
                 throw new SystemException();
@@ -143,22 +137,8 @@ function(val, arg) {
             {
                 var phaseNumber = phase.Phase;
                 var collection = phase.GetObjects();
-                var b = collection.Select(x => x[0].CreatedAt).ToList();
                 Console.WriteLine(phaseNumber);
                 Console.WriteLine(string.Join(", ", collection));
-            }
-        }
-
-        protected override void TearDown()
-        {
-            var result = RiakClient.IndexGet(Bucket, "$bucket", "");
-            if (!result.IsSuccess)
-            {
-                throw new SystemException();
-            }
-            foreach (var value in result.Value)
-            {
-                RiakClient.Delete(Bucket, value);
             }
         }
     }

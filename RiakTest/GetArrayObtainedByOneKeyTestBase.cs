@@ -4,17 +4,17 @@ using CorrugatedIron.Models;
 
 namespace RiakTest
 {
-    public class GetArrayObtainedByOneKeyTest : RiakTest
+    public class GetArrayObtainedByOneKeyTestBase : RiakTestBase
     {
-        public const string Bucket = "get-array-obtained-by-one-key-test";
         public const string Key = "my-key";
 
         private readonly int _n;
 
-        public GetArrayObtainedByOneKeyTest(int n)
+        public GetArrayObtainedByOneKeyTestBase(int n, bool setUp = true, bool tearDown = true)
+            : base("get-array-obtained-by-one-key-test", setUp, tearDown)
         {
             _n = n;
-        }
+        }   
 
         protected override void SetUp()
         {
@@ -42,19 +42,14 @@ namespace RiakTest
 
         protected override void DoWork()
         {
-            Bench("Take single object containing array by key", bucket =>
+            Bench("Take single object containing array by key", () =>
                 {
                     var result = RiakClient.Get(Bucket, Key);
                     if (!result.IsSuccess)
                     {
                         throw new SystemException();
                     }
-                }, Bucket);
-        }
-
-        protected override void TearDown()
-        {
-            RiakClient.DeleteBucket(Bucket);
+                });
         }
     }
 }

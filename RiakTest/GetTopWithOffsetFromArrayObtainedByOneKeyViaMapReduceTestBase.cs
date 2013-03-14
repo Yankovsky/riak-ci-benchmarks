@@ -7,16 +7,15 @@ using CorrugatedIron.Models.MapReduce.Inputs;
 
 namespace RiakTest
 {
-    public class GetTopWithOffsetFromArrayObtainedByOneKeyViaMapReduceTest : RiakTest
+    public class GetTopWithOffsetFromArrayObtainedByOneKeyViaMapReduceTestBase : RiakTestBase
     {
-        public const string Bucket = "get-top-with-offset-from-array-obtained-by-one-key-via-map-reduce-test";
         public const string Key = "my-key232";
 
         private readonly int _n;
         private readonly int _offset;
         private readonly int _limit;
 
-        public GetTopWithOffsetFromArrayObtainedByOneKeyViaMapReduceTest(int n, int offset, int limit)
+        public GetTopWithOffsetFromArrayObtainedByOneKeyViaMapReduceTestBase(int n, int offset, int limit) : base("get-top-with-offset-from-array-obtained-by-one-key-via-map-reduce-test")
         {
             _n = n;
             _offset = offset;
@@ -40,7 +39,7 @@ namespace RiakTest
         protected override void DoWork()
         {
             RiakResult<RiakMapReduceResult> result = null;
-            Bench("Take top N elements with offset K from single object obtained by key using map reduce", bucket =>
+            Bench("Take top N elements with offset K from single object obtained by key using map reduce", () =>
                 {
                     var rbki = new RiakBucketKeyInput();
                     rbki.AddBucketKey(Bucket, Key);
@@ -52,17 +51,12 @@ namespace RiakTest
                             .Keep(true)
                         );
                     result = RiakClient.MapReduce(query);
-                }, Bucket);
+                });
             if (!result.IsSuccess)
             {
                 throw new SystemException();
             }
             PrintMapReduceResult(result);
-        }
-
-        protected override void TearDown()
-        {
-            RiakClient.DeleteBucket(Bucket);
         }
 
         private static void PrintMapReduceResult(RiakResult<RiakMapReduceResult> mapReduceResult)

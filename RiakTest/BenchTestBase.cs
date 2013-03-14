@@ -13,12 +13,19 @@ namespace RiakTest
         public uint RWN { get; set; }
     }
 
-    internal class BenchTest : RiakTest
+
+    // DOES NOT WORK
+
+    internal class BenchTestBase : RiakTestBase
     {
         private const string SampleMemoryBucket = "sample-memory-bucket";
         private const string SampleBitcaskBucket = "sample-bitcask-bucket";
         private const string SampleLevelDbBucket = "sample-leveldb-bucket";
         private const int N = 1000;
+
+        public BenchTestBase(string bucket, bool setUp = true, bool tearDown = true) : base(bucket, setUp, tearDown)
+        {
+        }
 
         private static void Write(IRiakClient riakClient, string bucket)
         {
@@ -92,11 +99,6 @@ namespace RiakTest
 
             Console.WriteLine("Press enter to continue...");
             Console.Read();
-        }
-
-        protected override void TearDown()
-        {
-            throw new NotImplementedException();
         }
     }
 }

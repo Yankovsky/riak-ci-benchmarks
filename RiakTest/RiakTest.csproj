@@ -52,19 +52,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BenchTest.cs" />
+    <Compile Include="BenchTestBase.cs" />
+    <Compile Include="BigIntegersJavascriptTestBase.cs" />
+    <Compile Include="DataGenerator.cs" />
+    <Compile Include="DeleteBucket.cs" />
     <Compile Include="GoodComment.cs" />
-    <Compile Include="GetArrayObtainedByOneKeyTest.cs" />
+    <Compile Include="GetArrayObtainedByOneKeyTestBase.cs" />
     <Compile Include="GetGoodsByUserIdUsingRiakSearch.cs" />
-    <Compile Include="GoodsCommentsAllTogetherTest.cs" />
+    <Compile Include="GoodsCommentsAllTogetherTestBase.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="GetTopWithOffsetFromArrayObtainedByOneKeyViaMapReduceTest.cs" />
+    <Compile Include="GetTopWithOffsetFromArrayObtainedByOneKeyViaMapReduceTestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RiakTest.cs" />
-    <Compile Include="SecondaryIndexesTest.cs" />
-    <Compile Include="WriteThroughputTest.cs" />
-    <Compile Include="WriteToMultipleBucketsTest.cs" />
-    <Compile Include="SimpleRiakSearchTest.cs" />
+    <Compile Include="RiakTestBase.cs" />
+    <Compile Include="SecondaryIndexesTestBase.cs" />
+    <Compile Include="WriteThroughputTestBase.cs" />
+    <Compile Include="SimpleRiakSearchTestBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -72,6 +74,7 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -8,15 +8,15 @@ using CorrugatedIron.Models.Search;
 
 namespace RiakTest
 {
-    public class GetGoodsByUserIdUsingRiakSearch : RiakTest
+    public class GetGoodsByUserIdUsingRiakSearch : RiakTestBase
     {
-        public const string Bucket = "goods_comments";
 
         private readonly int _commentsCount;
         private readonly int _goodsCount;
         private readonly int _usersCount;
 
         public GetGoodsByUserIdUsingRiakSearch(int commentsCount, int goodsCount, int usersCount)
+            : base("goods_comments")
         {
             _commentsCount = commentsCount;
             _goodsCount = goodsCount;
@@ -54,7 +54,7 @@ namespace RiakTest
         protected override void DoWork()
         {
             RiakResult<RiakSearchResult> result = null;
-            Bench("Take ", bucket =>
+            Bench("Take ", () =>
                 {
                     var search = new RiakFluentSearch(Bucket, "UserId").Search("2").Build();
                     result = RiakClient.Search(new RiakSearchRequest {Query = search});
@@ -62,19 +62,9 @@ namespace RiakTest
                     {
                         throw new SystemException();
                     }
-                }, Bucket);
+                });
             Console.WriteLine(result.Value.NumFound);
             PrintSearchResults(result);
-        }
-
-        protected override void TearDown()
-        {
-            var goodsCommentsIds = new List<RiakObjectId>();
-            for (int i = 0; i < _commentsCount; i++)
-            {
-                goodsCommentsIds.Add(new RiakObjectId(Bucket, i.ToString(CultureInfo.InvariantCulture)));
-            }
-            RiakClient.Delete(goodsCommentsIds);
         }
 
         private static void PrintSearchResults(RiakResult<RiakSearchResult> result)

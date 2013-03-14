@@ -8,14 +8,12 @@ using CorrugatedIron.Models.Search;
 
 namespace RiakTest
 {
-    public class SimpleRiakSearchTest : RiakTest
+    public class SimpleRiakSearchTestBase : RiakTestBase
     {
-        public const string Bucket = "search_bucket";
-
         private readonly int _commentsCount;
         private readonly int _usersCount;
 
-        public SimpleRiakSearchTest(int commentsCount, int usersCount)
+        public SimpleRiakSearchTestBase(int commentsCount, int usersCount) : base("search_bucket")
         {
             _commentsCount = commentsCount;
             _usersCount = usersCount;
@@ -48,7 +46,7 @@ namespace RiakTest
         protected override void DoWork()
         {
             RiakResult<RiakSearchResult> result = null;
-            Bench("Take ", bucket =>
+            Bench("Take ", () =>
                 {
                     var search = new RiakFluentSearch(Bucket, "UserId").Search("23").Build();
                     result = RiakClient.Search(new RiakSearchRequest {Query = search, Rows = 10});
@@ -56,13 +54,8 @@ namespace RiakTest
                     {
                         throw new SystemException();
                     }
-                }, Bucket);
+                });
             PrintSearchResults(result);
-        }
-
-        protected override void TearDown()
-        {
-            RiakClient.DeleteBucket(Bucket);
         }
 
         private static void PrintSearchResults(RiakResult<RiakSearchResult> result)

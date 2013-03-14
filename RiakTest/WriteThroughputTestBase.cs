@@ -7,14 +7,12 @@ using CorrugatedIron.Models;
 
 namespace RiakTest
 {
-    public class WriteThroughputTest : RiakTest
+    public class WriteThroughputTestBase : RiakTestBase
     {
-        public const string Bucket = "write-test-bucket";
-
         private readonly int _n;
         private IEnumerable<RiakObject> _riakObjects;
 
-        public WriteThroughputTest(int n)
+        public WriteThroughputTestBase(int n) : base("write-test-bucket")
         {
             _n = n;
         }
@@ -43,19 +41,10 @@ namespace RiakTest
             }
             _riakObjects = sampleData.Select(x => new RiakObject(Bucket, x.Id.ToString(CultureInfo.InvariantCulture), x));
             IEnumerable<RiakResult<RiakObject>> riakResults = null;
-            Bench("Write batch", bucket => { riakResults = RiakClient.Put(_riakObjects); }, Bucket);
-            ;
+            Bench("Write batch", () => { riakResults = RiakClient.Put(_riakObjects); });
             if (riakResults.Any(riakResult => !riakResult.IsSuccess))
             {
                 throw new SystemException();
-            }
-        }
-
-        protected override void TearDown()
-        {
-            for (int i = 0; i < _n; i++)
-            {
-                RiakClient.Delete(Bucket, i.ToString(CultureInfo.InvariantCulture));
             }
         }
     }
