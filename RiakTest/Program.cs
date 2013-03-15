@@ -20,6 +20,8 @@ namespace RiakTest
             
             //new DeleteBucket("delete-bucket", 1000).Run();
 
+            new BigIntegersJavascriptTest("big-integers-bucket").Run();
+
             Console.WriteLine("Press enter to continue...");
             Console.Read();
         }
