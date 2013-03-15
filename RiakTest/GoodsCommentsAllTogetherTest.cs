@@ -94,8 +94,9 @@ namespace RiakTest
 
             // I wanted to create two separate reduce phases - first for ordering and second for offset/limit, but I getting strange results.
             // These phases should be executed on single machine with all data obtained.
-            // There is some additional param reduce_phase_only_1, but it doesn't work with CI, or i don't know how to use it with CI.
-            // So I merge two reduce phases into one. Now I have correct results.
+            // There is some additional param reduce_phase_only_1, but it doesn't currently work with CI.
+            // see https://github.com/DistributedNonsense/CorrugatedIron/issues/108
+            // Slice func doesn't work well yet.
             const string orderByCreateAtFunction = @"
 function(val, arg) { 
     return Riak.reduceSort(val, function(a,b) {
@@ -126,7 +127,7 @@ function(val, arg) {
                     var query = new RiakMapReduceQuery()
                         .Inputs(siDateRangeInput)
                         .MapJs(x => x.Name("Riak.mapValuesJson"))
-                        .ReduceJs(x => x.Source(orderByCreateAtFunction).Keep(true))
+                        .ReduceJs(x => x.Source(orderByCreateAtFunction))
                         .ReduceJs(x => x.Argument(offsetLimitArg).Source(sliceFunction).Keep(true));
                     result = RiakClient.MapReduce(query);
                 });
