@@ -116,8 +116,7 @@ function(val, arg) {
     var start = parsedArg.start;
     var end = parsedArg.end;
     return Riak.reduceSlice(val, [start, end]);
-}
-";
+}";
 
             RiakResult<RiakMapReduceResult> result = null;
             Bench(string.Format("Get goods comments by {0} {1}, sort by CreatedAt date and then take elements from {2} to {3}", _searchByIndexName, _searchByIndexId, _start, _end), () =>
@@ -127,7 +126,7 @@ function(val, arg) {
                     var query = new RiakMapReduceQuery()
                         .Inputs(siDateRangeInput)
                         .MapJs(x => x.Name("Riak.mapValuesJson"))
-                        .ReduceJs(x => x.Source(orderByCreateAtFunction))
+                        .ReduceJs(x => x.Source(orderByCreateAtFunction).Keep(true))
                         .ReduceJs(x => x.Argument(offsetLimitArg).Source(sliceFunction).Keep(true));
                     result = RiakClient.MapReduce(query);
                 });
