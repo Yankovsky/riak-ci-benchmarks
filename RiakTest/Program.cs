@@ -24,7 +24,8 @@ namespace RiakTest
             //new GoodsCommentsAllTogetherTest(100000, 2000, 200, 20, "UserId", 15, 97, 99, false, false).Run();
             //new DeleteBucket("delete-bucket", 1000).Run();
             //new BigIntegersJavascriptTest("big-integers-bucket").Run();
-            new BinIntIndexesExactMatchComparisonTest(100000, 3, tearDown: false, setUp: false).Run();
+            //new BinIntIndexesExactMatchComparisonTest(100000, 3, tearDown: false, setUp: false).Run();
+            new BinIntIndexesRangeQueryComparisonTest(100000, 100, 72, 80, 9000, tearDown: false, setUp:false).Run();
 
             Console.WriteLine("Press enter to continue...");
             Console.Read();

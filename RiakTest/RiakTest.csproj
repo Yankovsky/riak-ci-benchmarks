@@ -57,6 +57,7 @@
     <Compile Include="BenchTestBase.cs" />
     <Compile Include="BigIntegersJavascriptTest.cs" />
     <Compile Include="BinIntIndexesExactMatchComparisonTest.cs" />
+    <Compile Include="BinIntIndexesRangeQueryComparisonTest.cs" />
     <Compile Include="DataGenerator.cs" />
     <Compile Include="DeleteBucket.cs" />
     <Compile Include="GoodComment.cs" />

@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Linq;
 using CorrugatedIron.Models;
+using CorrugatedIron.Util;
 
 namespace RiakTest
 {
@@ -11,7 +12,8 @@ namespace RiakTest
         private readonly int _differentSecondaryIndexesCount;
         private readonly int _n;
 
-        public BinIntIndexesExactMatchComparisonTest(int n, int differentSecondaryIndexesCount, bool setUp = true, bool tearDown = true) : base("int-bin-indexes-comparison-bucket", setUp, tearDown)
+        public BinIntIndexesExactMatchComparisonTest(int n, int differentSecondaryIndexesCount, bool setUp = true, bool tearDown = true)
+            : base("int-bin-indexes-comparison-bucket", setUp, tearDown)
         {
             _n = n;
             _differentSecondaryIndexesCount = differentSecondaryIndexesCount;
