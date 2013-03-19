@@ -6,6 +6,7 @@ using CorrugatedIron;
 using CorrugatedIron.Models;
 using CorrugatedIron.Models.MapReduce;
 using CorrugatedIron.Models.MapReduce.Inputs;
+using Newtonsoft.Json;
 
 namespace RiakTest
 {
@@ -52,7 +53,7 @@ namespace RiakTest
                         DepartmentId = departmentId,
                         VoteMinus = i,
                         VotePlus = i,
-                        CreatedAt = new DateTime(2013, 3, i%29 + 1)
+                        CreatedAt = new DateTime(2013, 3, i%29 + 1, 0, 0, i)
                     };
                 sampleData.Add(goodComment);
             }
@@ -85,10 +86,7 @@ namespace RiakTest
             var currentDate = new DateTime(2013, 3, 15);
             var rangeMin = _searchByIndexId + DateAsString(currentDate.Subtract(new TimeSpan(7, 0, 0, 0)));
             var rangeMax = _searchByIndexId + DateAsString(currentDate);
-
-            // e.g. {"start":5,"end":10}
-            var offsetLimitArg = string.Format(@"{{""start"" : {0}, ""end"" : {1}}}", _start, _end);
-
+            
             // I wanted to pass [start,end] args to Riak.reduceSlice, but can't figure how on current moment. So I created my own wrapper for args
             // see https://github.com/DistributedNonsense/CorrugatedIron/issues/106
 
@@ -111,10 +109,9 @@ function(val, arg) {
     });
 }";
             const string sliceFunction = @"
-function(val, arg) { 
-    var parsedArg = JSON.parse(arg);
-    var start = parsedArg.start;
-    var end = parsedArg.end;
+function(val, arg) {
+    var start = arg.start;
+    var end = arg.end;
     return Riak.reduceSlice(val, [start, end]);
 }";
 
@@ -122,12 +119,12 @@ function(val, arg) {
             Bench(string.Format("Get goods comments by {0} {1}, sort by CreatedAt date and then take elements from {2} to {3}", _searchByIndexName, _searchByIndexId, _start, _end), () =>
                 {
                     var siDateRangeInput = new RiakBinIndexRangeInput(Bucket, _searchByIndexName, rangeMin, rangeMax);
-
+                   
                     var query = new RiakMapReduceQuery()
                         .Inputs(siDateRangeInput)
                         .MapJs(x => x.Name("Riak.mapValuesJson"))
-                        .ReduceJs(x => x.Source(orderByCreateAtFunction).Keep(true))
-                        .ReduceJs(x => x.Argument(offsetLimitArg).Source(sliceFunction).Keep(true));
+                        .ReduceJs(x => x.Source(orderByCreateAtFunction))
+                        .ReduceJs(x => x.Argument(new { reduce_phase_only_1 = true, start = _start, end = _end }).Source(sliceFunction).Keep(true));
                     result = RiakClient.MapReduce(query);
                 });
             if (!result.IsSuccess)

@@ -15,15 +15,16 @@ namespace RiakTest
             //new SimpleRiakSearchTest(1000, 100).Run(false, true);
             //new WriteToMultipleBucketsBenchmark(1000, 143, 47, 16).Run(true, false);
             //new SecondaryIndexesTest(100000, 10000, 2500, 6).Run(setUp:false,tearDown:false);
-            
+
 
             // NORMAL TESTS START HERE
 
             // Change params here to customize your test
             // at first run with params (true,false) to setup sample data, then change back to false, false
-            new GoodsCommentsAllTogetherTest(100000, 2000, 200, 20, "UserId", 15, 0, 10, false, false).Run();
+            //new GoodsCommentsAllTogetherTest(100000, 2000, 200, 20, "UserId", 15, 97, 99, false, false).Run();
             //new DeleteBucket("delete-bucket", 1000).Run();
             //new BigIntegersJavascriptTest("big-integers-bucket").Run();
+            new BinIntIndexesExactMatchComparisonTest(100000, 3, tearDown: false, setUp: false).Run();
 
             Console.WriteLine("Press enter to continue...");
             Console.Read();
